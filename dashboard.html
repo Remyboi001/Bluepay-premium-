@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+       
+.greeting-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.avatar {
+  font-size: 40px;
+  margin-right: 10px;
+  color: #007bff;
+  margin-top:40px;
+}
+
+.greeting {
+  text-align: left;
+  margin-top: 60px;
+}
+
+        .balance-container {
+            background-color: #114780;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            width: 350px;
+            height: 150px;
+            border-radius: 10px;
+            margin: 50px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            justify-content: flex-start; /* Move balance to left side */
+            align-items: center;
+}
+
+        }
+        .balance {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            font-size: 15px;
+        }
+        .button:hover {
+            background-color: #ccc;
+        }
+        footer {
+          background-color: #f0f0f0;
+          padding: 20px;
+          border-top: 1px solid #ddd;
+          
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+</head>
+<body>
+  
+<div class="greeting-container">
+<i class="fas fa-user-circle avatar"></i>
+<h2 class="greeting">Hi, <span id="username"></span>!</h2>
+</div>
+
+<div class="balance-container">
+<div style="text-align: left;">
+<p style="font-size:normal; font-weight:normal; margin-top:1px;">Today Balance</p>
+<p style="font-size:20px; font-weight:bold; " class="balance" id="balance">0.00</p>
+<p style="font-size:normal;">Daily Spend Target: ₦200,000</p>
+</div>
+</div>
+
+<div class="button-container">
+<button class="button" id="claim-button"><i class="fas fa-hand-holding-usd"></i> Claim</button>
+<button class="button" id="reset-button"><i class="fas fa-undo"></i> Reset</button>
+<button class="button" id="airtime-button"><i class="fas fa-mobile-alt"></i> Airtime</button>
+<button class="button" id="buy-bpc-button"><i class="fas fa-shopping-cart"></i> Buy BPC</button>
+<button class="button" id="withdraw-button"><i class="fas fa-sign-out-alt"></i> Withdraw</button>
+</div>
+
+<footer style="text-align: center; margin-top: 50px;">
+<p>&copy; Licenced by Median.co</p>
+<p style="font-weight:bold;"> <a href="(link unavailable)">Contact</a></p>
+</footer>
+
+    <!-- Rest of the dashboard content will go here -->
+
+    <script>
+        
+const claimButton = document.getElementById('claim-button');
+const resetButton = document.getElementById('reset-button');
+const airtimeButton = document.getElementById('airtime-button');
+const buyBpcButton = document.getElementById('buy-bpc-button');
+const withdrawButton = document.getElementById('withdraw-button');
+
+let claimedToday = localStorage.getItem('claimedToday');
+let balance = localStorage.getItem('balance');
+let username = localStorage.getItem('username');
+
+if (balance === null) {
+balance = 0;
+} else {
+balance = parseInt(balance);
+}
+
+if (username === null) {
+username = 'User';
+}
+
+document.getElementById('username').innerText = username;
+document.getElementById('balance').innerText = `₦${balance.toFixed(2)}`;
+
+claimButton.addEventListener('click', () => {
+const claimTime = localStorage.getItem('claimTime');
+if (claimedToday === 'true' && claimTime && claimTime > new Date().getTime()) {
+Swal.fire({
+icon: 'error',
+title: 'Error',
+text: 'You have claimed today, come back tomorrow to claim again',
+});
+} else {
+balance += 200000;
+document.getElementById('balance').innerText = `₦${balance.toFixed(2)}`;
+localStorage.setItem('balance', balance.toString());
+localStorage.setItem('claimedToday', 'true');
+const now = new Date();
+const tomorrow = new Date(now.setDate(now.getDate() + 1));
+localStorage.setItem('claimTime', tomorrow.getTime());
+Swal.fire({
+icon: 'success',
+title: 'Success',
+text: 'You have successfully claimed ₦200,000',
+});
+}
+});
+
+resetButton.addEventListener('click', () => {
+balance = 0;
+document.getElementById('balance').innerText = `₦${balance.toFixed(2)}`;
+localStorage.setItem('balance', balance.toString());
+localStorage.setItem('claimedToday', 'false');
+localStorage.removeItem('claimTime');
+Swal.fire({
+icon: 'success',
+title: 'Success',
+text: 'Balance has been reset to ₦0',
+});
+});
+
+airtimeButton.addEventListener('click', () => {
+Swal.fire({
+icon: 'error',
+title: 'Error',
+text: 'Airtime Subscription Not Available At The Moment',
+});
+});
+
+buyBpcButton.addEventListener('click', () => {
+window.location.href = 'buy.html';
+});
+
+withdrawButton.addEventListener('click', () => {
+window.location.href = 'withdraw.html';
+});
+
+// Check if claim time has expired
+const claimTime = localStorage.getItem('claimTime');
+if (claimTime && claimTime < new Date().getTime()) {
+localStorage.setItem('claimedToday', 'false');
+}
+
+  </script>
+</body>
+</html>
+

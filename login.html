@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+background-color: #f0f0f0;
+}
+
+    h3 {
+        margin-bottom: 20px;
+    }
+    
+    form {
+        width: 240px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 10px;
+    }
+    
+    input[type="email"], input[type="text"], input[type="password"] {
+        width: 90%;
+        height: 20px;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+    
+    button[type="submit"] {
+        width: 100%;
+        height: 30px;
+        background-color: #382fff;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    button[type="submit"]:hover {
+        background-color: #3e8e41;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+
+</head>
+<body>
+<h3>Register/Login</h3>
+<form id="login-form">
+<label for="email">Email:</label>
+<input type="email" id="email" required>
+
+    <label for="username">Username:</label>
+    <input type="text" id="username" required>
+    
+    <label for="password">Password:</label>
+    <input type="password" id="password" required>
+    
+    <button type="submit">Login</button>
+</form>
+
+<script>
+    const form = document.getElementById('login-form');
+    
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        if (email === "" || username === "" || password === "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Please fill in all fields',
+            });
+        } else {
+            localStorage.setItem('email', email);
+            localStorage.setItem('username', username);
+            localStorage.setItem('password', password);
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Login successful!',
+            }).then(() => {
+                window.location.href = 'dashboard.html';
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

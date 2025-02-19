@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Withdrawal</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+margin: 0;
+padding: 0;
+}
+.container {
+max-width: 300px;
+margin: 20px auto;
+padding: 30px;
+background-color: #f9f9f9;
+border: 1px solid #ccc;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.form-group {
+margin-bottom: 20px;
+}
+.form-group label {
+display: block;
+margin-bottom: 10px;
+}
+.form-group input {
+width: 80%;
+height: 20px;
+margin-bottom: 20px;
+padding: 10px;
+border: 1px solid #ccc;
+}
+.withdraw-button {
+background-color: #007bff;
+color: #fff;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+.withdraw-button:hover {
+background-color: #0069d9;
+}
+</style>
+<link rel="stylesheet" href="(link unavailable)" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+</head>
+<body>
+<h3 style="text-align:center;">Balance Withdraw</h3>
+<div class="container">
+<form>
+<div class="form-group">
+<label for="amount">Amount:</label>
+<input type="number" id="amount" required>
+</div>
+<div class="form-group">
+<label for="full-name">Full Name:</label>
+<input type="text" id="full-name" required>
+</div>
+<div class="form-group">
+<label for="bank-name">Bank Name:</label>
+<input type="text" id="bank-name" required>
+</div>
+<div class="form-group">
+<label for="bank-account-number">Bank Account Number:</label>
+<input type="text" id="bank-account-number" required>
+</div>
+<div class="form-group">
+<label for="bpc-code">BPC Code:</label>
+<input type="text" id="bpc-code" required>
+</div>
+<button class="withdraw-button" id="withdraw-button">Withdraw</button>
+</form>
+</div>
+<script>
+const withdrawButton = document.getElementById('withdraw-button');
+const amountInput = document.getElementById('amount');
+const fullNameInput = document.getElementById('full-name');
+const bankNameInput = document.getElementById('bank-name');
+const bankAccountNumberInput = document.getElementById('bank-account-number');
+const bpcCodeInput = document.getElementById('bpc-code');
+
+withdrawButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (amountInput.value === '' || fullNameInput.value === '' || bankNameInput.value === '' || bankAccountNumberInput.value === '' || bpcCodeInput.value === '') {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Please fill in all fields',
+    });
+  } else if (bpcCodeInput.value !== 'RROBPC') {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'Incorrect BPC code! Please Purchase the BPC code to Withdraw funds',
+    });
+  } else {
+    const amount = parseInt(amountInput.value);
+    const balance = parseInt(localStorage.getItem('balance'));
+    if (balance < amount) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Insufficient balance',
+      });
+    } else {
+      // Deduct withdrawal amount from balance
+      const newBalance = balance - amount;
+      localStorage.setItem('balance', newBalance.toString());
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Withdrawal successful',
+      }).then((result) => {
+        if (result.value) {
+          const bankName = bankNameInput.value;
+          window.location.href = `transaction.html?amount=${amount}&bankName=${bankName}`;
+        }
+      });
+    }
+  }
+});
+
+</script>
+</body>
+</html>

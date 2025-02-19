@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transfer Successful</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+text-align: center;
+margin-top: 100px;
+}
+.success-icon {
+color: green;
+font-size: 50px;
+}
+.ok-button {
+background-color: green;
+color: white;
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="success-icon">&#10004;</div>
+<h2 id="success-message">Transfer Successful!</h2>
+<button class="ok-button">Ok, I get it!</button>
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const amount = urlParams.get('amount');
+const bankName = urlParams.get('bankName');
+if (amount && bankName) {
+document.getElementById('success-message').innerText = `You have Successfully Transferred ₦${amount} to ${bankName}`;
+}
+</script>
+</body>
+</html>
